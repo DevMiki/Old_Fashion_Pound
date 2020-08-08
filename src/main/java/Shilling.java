@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Shilling implements CurrencyUnit{
 
     private int shilling;
@@ -8,7 +10,7 @@ public class Shilling implements CurrencyUnit{
 
     @Override
     public int toSmallestUnit() {
-        return shilling*20;
+        return shilling*12;
     }
 
     public int getShilling() {
@@ -17,6 +19,19 @@ public class Shilling implements CurrencyUnit{
 
     public void setShilling(int shilling) {
         this.shilling = shilling;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Shilling shilling1 = (Shilling) o;
+        return shilling == shilling1.shilling;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(shilling);
     }
 }
 
