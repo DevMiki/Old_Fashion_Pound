@@ -28,6 +28,31 @@ public class Amount {
         return Amount.fromBaseUnit(penny.toSmallestUnit()+shilling.toSmallestUnit()+pound.toSmallestUnit());
     }
 
+    public Amount subtract(Amount amountToSubtract) {
+        final Penny penny = new Penny(this.penny.getPenny() - amountToSubtract.penny.getPenny());
+        final Shilling shilling = new Shilling(this.shilling.getShilling() - amountToSubtract.shilling.getShilling());
+        final Pound pound = new Pound(this.pound.getPound() - amountToSubtract.pound.getPound());
+        if((penny.toSmallestUnit()+shilling.toSmallestUnit()+pound.toSmallestUnit()) < 0){
+            throw new RuntimeException(String.format("Your amount is below the 0 pennies: %s",Amount.fromBaseUnit(penny.toSmallestUnit() + shilling.toSmallestUnit() + pound.toSmallestUnit())));
+        }
+        return Amount.fromBaseUnit(penny.toSmallestUnit() + shilling.toSmallestUnit() + pound.toSmallestUnit());
+    }
+
+    public Amount divide(int denominator){
+        final int totalPennies = penny.toSmallestUnit() + shilling.toSmallestUnit() + pound.toSmallestUnit();
+        final double result = totalPennies*1.0/denominator;
+        final String rest = Math.round((result - (int) result)*denominator) > 1 ? fromBaseUnit((int) Math.round((result - (int) result)*denominator)).toString() : "0";
+
+        System.out.println(String.format("Your rest is %s",rest));
+        return Amount.fromBaseUnit((int) result);
+    }
+
+    public Amount multiply(int multiplier) {
+        final int totalPennies = penny.toSmallestUnit() + shilling.toSmallestUnit() + pound.toSmallestUnit();
+        return Amount.fromBaseUnit(totalPennies*multiplier);
+    }
+
+
     @Override
     public String toString() {
         return String.format("%dp %ds %dd", pound.getPound(), shilling.getShilling(), penny.getPenny());
