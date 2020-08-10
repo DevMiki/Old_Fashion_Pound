@@ -44,6 +44,20 @@ public class AmountTest {
     }
 
     @Test
+    public void canSumCurrencies1(){
+        final Amount expected = new Amount(new Penny(6),new Shilling(2),new Pound(9));
+        final Amount actual = firstAmount.sumByString("3p 4s 10d");
+        Assert.assertEquals(expected,actual);
+    }
+
+    @Test
+    public void canSumCurrencies2(){
+        final Amount expected = new Amount(new Penny(1),new Shilling(18),new Pound(5));
+        final Amount actual = firstAmount.sumByString("0p 0s 5d");
+        Assert.assertEquals(expected,actual);
+    }
+
+    @Test
     public void canSubtractCurrencies() throws Exception {
         final Amount expected = new Amount(new Penny(10),new Shilling(12),new Pound(2));
         final Amount actual = firstAmount.subtract(secondAmount);
