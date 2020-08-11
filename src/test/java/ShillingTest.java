@@ -1,3 +1,4 @@
+import it.core.currencies.Shilling;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,10 +1,14 @@
+import it.core.Amount;
+import it.core.currencies.Penny;
+import it.core.currencies.Pound;
+import it.core.currencies.Shilling;
+import it.core.result.FractionalResult;
+import it.core.result.Result;
+import it.core.result.WholeResult;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 import static org.hamcrest.CoreMatchers.is;
 
@@ -12,7 +16,7 @@ public class AmountTest {
     private static final Amount firstAmount = new Amount(new Penny(8), new Shilling(17), new Pound(5));
     private static final Amount secondAmount = new Amount(new Penny(10), new Shilling(4), new Pound(3));
     private static final Amount thirdAmount =  new Amount(new Penny(8), new Shilling(17), new Pound(5));
-    private static final Amount fourthAmount = new Amount(new Penny(2),new Shilling(19),new Pound(1));
+    private static final Result fourthAmount = new FractionalResult(new Amount(new Penny(2),new Shilling(19),new Pound(1)),new Amount(new Penny(2)));
 
     @Test
     public void canCreateAmountFromBaseUnit(){
@@ -38,29 +42,29 @@ public class AmountTest {
 
     @Test
     public void canSumCurrencies() {
-        final Amount expected = new Amount(new Penny(6),new Shilling(2),new Pound(9));
-        final Amount actual = firstAmount.sum(secondAmount);
+        final Result expected = new WholeResult(new Amount(new Penny(6),new Shilling(2),new Pound(9)));
+        final Result actual = firstAmount.sum(secondAmount);
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void canSumCurrencies1(){
-        final Amount expected = new Amount(new Penny(6),new Shilling(2),new Pound(9));
-        final Amount actual = firstAmount.sumByString("3p 4s 10d");
+        final Result expected = new WholeResult(new Amount(new Penny(6),new Shilling(2),new Pound(9)));
+        final Result actual = firstAmount.sumByString("3p 4s 10d");
         Assert.assertEquals(expected,actual);
     }
 
     @Test
     public void canSumCurrencies2(){
-        final Amount expected = new Amount(new Penny(1),new Shilling(18),new Pound(5));
-        final Amount actual = firstAmount.sumByString("0p 0s 5d");
+        final Result expected = new WholeResult(new Amount(new Penny(1),new Shilling(18),new Pound(5)));
+        final Result actual = firstAmount.sumByString("0p 0s 5d");
         Assert.assertEquals(expected,actual);
     }
 
     @Test
     public void canSubtractCurrencies() throws Exception {
-        final Amount expected = new Amount(new Penny(10),new Shilling(12),new Pound(2));
-        final Amount actual = firstAmount.subtract(secondAmount);
+        final Result expected = new WholeResult(new Amount(new Penny(10),new Shilling(12),new Pound(2)));
+        final Result actual = firstAmount.subtract(secondAmount);
         Assert.assertEquals(expected, actual);
     }
 
@@ -71,29 +75,25 @@ public class AmountTest {
     public void canSubtractCurrency() {
         thrown.expect(java.lang.Exception.class);
         thrown.expectMessage("Your amount is below the 0 pennies: -2p -3s -2d");
-        thrown.expectCause(is(new java.lang.Exception().getCause()));
+        thrown.expectCause(is(new java.lang.RuntimeException().getCause()));
 
         Amount firstAmount = new Amount(new Penny(8), new Shilling(1), new Pound(1));
         Amount secondAmount = new Amount(new Penny(10), new Shilling(4), new Pound(3));
-        final Amount expected = new Amount(new Penny(-1),new Shilling(-1),new Pound(-2));
-        final Amount actual = firstAmount.subtract(secondAmount);
+        final Result expected = new WholeResult(new Amount(new Penny(-2),new Shilling(-3),new Pound(-2)));
+        final Result actual = firstAmount.subtract(secondAmount);
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void canDivideCurrency(){
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStream));
-        String expectedOutput ="Your rest is 0p 0s 2d";
-        final Amount actual = thirdAmount.divide(3);
-        Assert.assertEquals(expectedOutput+"\n", outputStream.toString());
+        final Result actual = thirdAmount.divide(3);
         Assert.assertEquals(fourthAmount,actual);
     }
 
     @Test
     public void canMultiplyCurrency(){
-        final Amount expected = new Amount(new Penny(4),new Shilling(15),new Pound(11));
-        final Amount actual = thirdAmount.multiply(2);
+        final Result expected = new WholeResult(new Amount(new Penny(4),new Shilling(15),new Pound(11)));
+        final Result actual = thirdAmount.multiply(2);
         Assert.assertEquals(expected,actual);
     }
 }

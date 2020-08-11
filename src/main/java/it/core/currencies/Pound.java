@@ -1,3 +1,5 @@
+package it.core.currencies;
+
 import java.util.Objects;
 
 public class Pound implements CurrencyUnit{
