@@ -1,8 +1,6 @@
 package it.core.result;
 
-
 import it.core.Amount;
-
 import java.util.Objects;
 
 public class WholeResult implements Result {

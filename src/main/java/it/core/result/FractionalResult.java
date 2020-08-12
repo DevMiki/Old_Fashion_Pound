@@ -4,7 +4,6 @@ import it.core.Amount;
 
 public class FractionalResult extends WholeResult {
 
-
     private Amount rest;
 
     public FractionalResult(Amount result, Amount rest) {

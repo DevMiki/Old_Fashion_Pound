@@ -10,8 +10,11 @@ This library allows you to use the 4 fundamental operations (sum,division,subtra
 
 Example: *12p 6s 10d* equals to 12 pounds, 6 shellings and 10 pennies.
 
-Note that the result after a division operation will be shown as follows: *Xp Ys Zd (Xp Ys Zd)*.  
+Notes:
+- that the result after a division operation will be shown as follows: *Xp Ys Zd (Xp Ys Zd)*.  
 Inside the parentheses will be shown the rest.
+- The subtract operation will throw a `NegativeAmountException` if the result is negative.
+
 
 -------------
 

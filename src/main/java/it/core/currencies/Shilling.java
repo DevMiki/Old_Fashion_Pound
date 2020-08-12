@@ -2,17 +2,12 @@ package it.core.currencies;
 
 import java.util.Objects;
 
-public class Shilling implements CurrencyUnit{
+public class Shilling implements CurrencyUnit {
 
     private int shilling;
 
     public Shilling(int shilling) {
         this.shilling = shilling;
-    }
-
-    @Override
-    public int toSmallestUnit() {
-        return shilling*12;
     }
 
     public int getShilling() {
@@ -21,6 +16,11 @@ public class Shilling implements CurrencyUnit{
 
     public void setShilling(int shilling) {
         this.shilling = shilling;
+    }
+
+    @Override
+    public int toSmallestUnit() {
+        return shilling * 12;
     }
 
     @Override

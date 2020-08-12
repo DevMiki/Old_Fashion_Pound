@@ -1,4 +1,5 @@
 import it.core.Amount;
+import it.core.NegativeAmountException;
 import it.core.currencies.Penny;
 import it.core.currencies.Pound;
 import it.core.currencies.Shilling;
@@ -9,8 +10,6 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import static org.hamcrest.CoreMatchers.is;
 
 public class AmountTest {
     private static final Amount firstAmount = new Amount(new Penny(8), new Shilling(17), new Pound(5));
@@ -73,9 +72,8 @@ public class AmountTest {
 
     @Test
     public void canSubtractCurrency() {
-        thrown.expect(java.lang.Exception.class);
+        thrown.expect(NegativeAmountException.class);
         thrown.expectMessage("Your amount is below the 0 pennies: -2p -3s -2d");
-        thrown.expectCause(is(new java.lang.RuntimeException().getCause()));
 
         Amount firstAmount = new Amount(new Penny(8), new Shilling(1), new Pound(1));
         Amount secondAmount = new Amount(new Penny(10), new Shilling(4), new Pound(3));

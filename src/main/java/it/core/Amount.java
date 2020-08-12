@@ -36,7 +36,7 @@ public class Amount {
 
     public static int toBaseUnit(String amountToCompute) {
         final List<String> allMatches = new ArrayList<>();
-        Matcher matcher = Pattern.compile("(\\d+)p (\\d+)s (\\d+)d")
+        final Matcher matcher = Pattern.compile("(\\d+)p (\\d+)s (\\d+)d")
                 .matcher(amountToCompute);
         while (matcher.find()) {
             allMatches.add(matcher.group(1));
@@ -70,14 +70,14 @@ public class Amount {
 
         final int result = totalBaseUnits - amountToSubtract.totalBaseUnits;
         if (result < 0) {
-            throw new RuntimeException(String.format("Your amount is below the 0 pennies: %s", new WholeResult(Amount.fromBaseUnit(result))).toString());
+            throw new NegativeAmountException(String.format("Your amount is below the 0 pennies: %s", new WholeResult(Amount.fromBaseUnit(result))));
         }
         return new WholeResult(Amount.fromBaseUnit(result));
     }
 
     public Result divide(int denominator) {
         final double result = totalBaseUnits * 1.0 / denominator;
-        final Amount rest = Math.round((result - (int) result) * denominator) > 1 ? fromBaseUnit((int) Math.round((result - (int) result) * denominator)) : new Amount();
+        final Amount rest = fromBaseUnit((int) Math.round((result - (int) result) * denominator));
 
         return new FractionalResult(Amount.fromBaseUnit((int) result), rest);
     }
@@ -99,7 +99,4 @@ public class Amount {
         return Objects.hash(totalBaseUnits);
     }
 
-    public int getTotalBaseUnits() {
-        return totalBaseUnits;
-    }
 }
